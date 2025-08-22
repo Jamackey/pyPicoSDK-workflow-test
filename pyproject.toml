@@ -42,3 +42,6 @@ include = ["pypicosdk/*"]
 
 [tool.hatch.version]
 path = "pypicosdk/version.py"
+
+[tool.black]
+line-length = 79
