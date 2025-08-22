@@ -1,9 +1,12 @@
+"""Empty"""
+
 import ctypes
-import numpy as np
 
-from ..constants import *
+from ..common import BaseProtocol
+from ..constants import RESOLUTION
 
-class shared_4000a_6000a:
+
+class SharedPs4000aPs6000a(BaseProtocol):
     """Shared methods between ps4000a and ps6000a"""
 
     def open_unit_async(

@@ -4,8 +4,7 @@
 # reference its ``__all__`` attribute for static type checkers like Pylance.
 from . import pypicosdk as _impl
 
-# Re-export everything defined in ``pypicosdk`` for backwards compatibility.
-from .pypicosdk import *
+from .pypicosdk import *  # noqa: F403, F401
 
 # Expose the full list of public names for static analysers.
 __all__ = _impl.__all__

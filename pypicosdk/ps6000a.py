@@ -1,13 +1,21 @@
 import ctypes
 from typing import override
 
-from .constants import *
+from .constants import (
+    RESOLUTION,
+    resolution_literal,
+    resolution_map,
+    CHANNEL,
+    UNIT_INFO,
+    SIGGEN_FILTER_STATE,
+)
 from .common import PicoSDKException
 from .base import PicoScopeBase
-from .shared.ps6000a_psospa import shared_ps6000a_psospa
-from .shared.ps6000a_ps4000a import shared_4000a_6000a
+from .shared.ps6000a_psospa import SharedPs6000aPsospa
+from .shared.ps6000a_ps4000a import SharedPs4000aPs6000a
 
-class ps6000a(PicoScopeBase, shared_ps6000a_psospa, shared_4000a_6000a):
+
+class ps6000a(PicoScopeBase, SharedPs6000aPsospa, SharedPs4000aPs6000a):
     """PicoScope 6000 (A) API specific functions"""
 
     @override
@@ -15,14 +23,18 @@ class ps6000a(PicoScopeBase, shared_ps6000a_psospa, shared_4000a_6000a):
         super().__init__("ps6000a", *args, **kwargs)
 
     @override
-    def open_unit(self, serial_number:str=None, resolution:RESOLUTION | resolution_literal=0) -> None:
+    def open_unit(
+        self,
+        serial_number: str = None,
+        resolution: RESOLUTION | resolution_literal = 0,
+    ) -> None:
         # If using Literals, convert to int
         if resolution in resolution_map:
             resolution = resolution_map[resolution]
 
         super().open_unit(serial_number, resolution)
-        self.min_adc_value, self.max_adc_value =super().get_adc_limits()
-    
+        self.min_adc_value, self.max_adc_value = self.get_adc_limits()
+
     def get_channel_combinations(self, timebase: int) -> list[int]:
         """Return valid channel flag combinations for a proposed timebase.
         This wraps ``ps6000aChannelCombinationsStateless`` and requires the
@@ -36,7 +48,9 @@ class ps6000a(PicoScopeBase, shared_ps6000a_psospa, shared_4000a_6000a):
         """
 
         if self.resolution is None:
-            raise PicoSDKException("Device has not been initialized, use open_unit()")
+            raise PicoSDKException(
+                "Device has not been initialized, use open_unit()"
+            )
 
         n_combos = ctypes.c_uint32()
         # First call obtains the required array size
@@ -87,8 +101,10 @@ class ps6000a(PicoScopeBase, shared_ps6000a_psospa, shared_4000a_6000a):
         )
 
         return string.value.decode()
-    
-    def siggen_clock_manual(self, dac_clock_frequency: float, prescale_ratio: int) -> None:
+
+    def siggen_clock_manual(
+        self, dac_clock_frequency: float, prescale_ratio: int
+    ) -> None:
         """Manually control the signal generator clock.
         Args:
             dac_clock_frequency: Frequency of the DAC clock in Hz.
@@ -113,5 +129,6 @@ class ps6000a(PicoScopeBase, shared_ps6000a_psospa, shared_4000a_6000a):
             self.handle,
             filter_state,
         )
-    
-__all__ = ['ps6000a']
+
+
+__all__ = ["ps6000a"]

@@ -1,10 +1,15 @@
+"""Enum and Literal list for pyPicoSDK"""
+
 from enum import IntEnum
 import ctypes
 from typing import Literal
 
+# pylint: disable=C0103, R0903, C0302, C0115
+
+
 class UNIT_INFO:
-    """
-    Unit information identifiers for querying PicoScope device details.
+    """Unit information identifiers for querying PicoScope device
+    details.
 
     Attributes:
         PICO_DRIVER_VERSION: PicoSDK driver version.
@@ -22,9 +27,9 @@ class UNIT_INFO:
     Examples:
         >>> scope.get_unit_info(picosdk.UNIT_INFO.PICO_BATCH_AND_SERIAL)
         "JM115/0007"
-
     """
-    PICO_DRIVER_VERSION = 0 
+
+    PICO_DRIVER_VERSION = 0
     PICO_USB_VERSION = 1
     PICO_HARDWARE_VERSION = 2
     PICO_VARIANT_INFO = 3
@@ -36,9 +41,9 @@ class UNIT_INFO:
     PICO_FIRMWARE_VERSION_1 = 9
     PICO_FIRMWARE_VERSION_2 = 10
 
+
 class RESOLUTION:
-    """
-    Resolution constants for PicoScope devices.
+    """Resolution constants for PicoScope devices.
 
     **WARNING: Not all devices support all resolutions.**
 
@@ -53,6 +58,7 @@ class RESOLUTION:
     Examples:
         >>> scope.open_unit(resolution=RESOLUTION._16BIT)
     """
+
     _8BIT = 0
     _10BIT = 10
     _12BIT = 1
@@ -60,12 +66,21 @@ class RESOLUTION:
     _15BIT = 3
     _16BIT = 4
 
-resolution_literal = Literal['8bit', '10bit', '12bit', '14bit', '15bit', '16bit']
-resolution_map = {'8bit':0, '10bit':10, '12bit':1, '14bit':2, '15bit':3, '16bit':4}
+
+resolution_literal = Literal[
+    "8bit", "10bit", "12bit", "14bit", "15bit", "16bit"]
+resolution_map = {
+    "8bit": 0,
+    "10bit": 10,
+    "12bit": 1,
+    "14bit": 2,
+    "15bit": 3,
+    "16bit": 4,
+}
+
 
 class TRIGGER_DIR:
-    """
-    Trigger direction constants for configuring PicoScope triggers.
+    """Trigger direction constants for configuring PicoScope triggers.
 
     Attributes:
         ABOVE: Trigger when the signal goes above the threshold.
@@ -74,22 +89,28 @@ class TRIGGER_DIR:
         FALLING: Trigger on falling edge.
         RISING_OR_FALLING: Trigger on either rising or falling edge.
     """
+
     ABOVE = 0
     BELOW = 1
     RISING = 2
     FALLING = 3
     RISING_OR_FALLING = 4
 
-trigger_dir_l = Literal['above', 'below', 'rising', 'falling', 'rising or falling']
-trigger_dir_m = {'above': 0, 
-                 'below': 1, 
-                 'rising': 2, 
-                 'falling': 3, 
-                 'rising or falling': 4}
 
-class WAVEFORM:    
-    """
-    Waveform type constants for PicoScope signal generator configuration.
+trigger_dir_l = Literal[
+    "above", "below", "rising", "falling", "rising or falling"]
+trigger_dir_m = {
+    "above": 0,
+    "below": 1,
+    "rising": 2,
+    "falling": 3,
+    "rising or falling": 4,
+}
+
+
+class WAVEFORM:
+    """Waveform type constants for PicoScope signal generator
+    configuration.
 
     Attributes:
         SINE: Sine wave.
@@ -106,6 +127,7 @@ class WAVEFORM:
         PRBS: Pseudo-random binary sequence.
         ARBITRARY: Arbitrary user-defined waveform.
     """
+
     SINE = 0x00000011
     SQUARE = 0x00000012
     TRIANGLE = 0x00000013
@@ -120,36 +142,37 @@ class WAVEFORM:
     PRBS = 0x00002002
     ARBITRARY = 0x10000000
 
+
 waveform_literal = Literal[
-    'sine',
-    'square',
-    'triangle',
-    'ramp_up',
-    'ramp_down',
-    'sinc',
-    'gaussian',
-    'half_sine',
-    'dc_voltage',
-    'pwm',
-    'whitenoise',
-    'prbs',
-    'arbitrary'
+    "sine",
+    "square",
+    "triangle",
+    "ramp_up",
+    "ramp_down",
+    "sinc",
+    "gaussian",
+    "half_sine",
+    "dc_voltage",
+    "pwm",
+    "whitenoise",
+    "prbs",
+    "arbitrary",
 ]
 
 waveform_map = {
-    'sine':        0x00000011,
-    'square':      0x00000012,
-    'triangle':    0x00000013,
-    'ramp_up':     0x00000014,
-    'ramp_down':   0x00000015,
-    'sinc':        0x00000016,
-    'gaussian':    0x00000017,
-    'half_sine':   0x00000018,
-    'dc_voltage':  0x00000400,
-    'pwm':         0x00001000,
-    'whitenoise':  0x00002001,
-    'prbs':        0x00002002,
-    'arbitrary':   0x10000000
+    "sine": 0x00000011,
+    "square": 0x00000012,
+    "triangle": 0x00000013,
+    "ramp_up": 0x00000014,
+    "ramp_down": 0x00000015,
+    "sinc": 0x00000016,
+    "gaussian": 0x00000017,
+    "half_sine": 0x00000018,
+    "dc_voltage": 0x00000400,
+    "pwm": 0x00001000,
+    "whitenoise": 0x00002001,
+    "prbs": 0x00002002,
+    "arbitrary": 0x10000000,
 }
 
 
@@ -167,9 +190,10 @@ class CHANNEL(IntEnum):
         H: Channel H
         TRIGGER_AUX: Dedicated auxiliary trigger input
     """
+
     A = 0
     B = 1
-    C = 2 
+    C = 2
     D = 3
     E = 4
     F = 5
@@ -181,77 +205,65 @@ class CHANNEL(IntEnum):
 
     #: Auxiliary trigger input/output.
     TRIGGER_AUX = 1001
-    
+
     PULSE_WIDTH_SOURCE = 0x10000000
     PICO_DIGITAL_SOURCE = 0x10000001
 
-CHANNEL_NAMES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+
+CHANNEL_NAMES = ["A", "B", "C", "D", "E", "F", "G", "H"]
 
 channel_literal = Literal[
-    'channel_a',
-    'channel_b',
-    'channel_c',
-    'channel_d',
-    'channel_e',
-    'channel_f',
-    'channel_g',
-    'channel_h',
-    'external',
-    'trigger_aux'
+    "channel_a",
+    "channel_b",
+    "channel_c",
+    "channel_d",
+    "channel_e",
+    "channel_f",
+    "channel_g",
+    "channel_h",
+    "external",
+    "trigger_aux",
 ]
 
 channel_map = {
-    'channel_a': 0,
-    'channel_b': 1,
-    'channel_c': 2,
-    'channel_d': 3,
-    'channel_e': 4,
-    'channel_f': 5,
-    'channel_g': 6,
-    'channel_h': 7,
-    'external': 1000,
-    'trigger_aux': 1001
+    "channel_a": 0,
+    "channel_b": 1,
+    "channel_c": 2,
+    "channel_d": 3,
+    "channel_e": 4,
+    "channel_f": 5,
+    "channel_g": 6,
+    "channel_h": 7,
+    "external": 1000,
+    "trigger_aux": 1001,
 }
 
 led_channel_l = Literal[
-    'A', 
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'AWG',
-    'AUX',
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "AWG",
+    "AUX",
 ]
 
 led_channel_m = {
-    'A':0, 
-    'B':1,
-    'C':2,
-    'D':3,
-    'E':4,
-    'F':5,
-    'G':6,
-    'H':7,
-    'AWG':0x10000,
-    'AUX':0x20000,
+    "A": 0,
+    "B": 1,
+    "C": 2,
+    "D": 3,
+    "E": 4,
+    "F": 5,
+    "G": 6,
+    "H": 7,
+    "AWG": 0x10000,
+    "AUX": 0x20000,
 }
 
-class PICO_CHANNEL_OVERVOLTAGE_TRIPPED(ctypes.Structure):
-    """Status flag indicating an overvoltage trip on a channel.
-    Attributes:
-        channel_: Channel identifier as a :class:`CHANNEL` value.
-        tripped_: ``1`` if an overvoltage trip occurred, otherwise ``0``.
-    """
-
-    _pack_ = 1
-
-    _fields_ = [
-        ("channel_", ctypes.c_int32),
-        ("tripped_", ctypes.c_uint8),
-    ]
 
 class PICO_CHANNEL_FLAGS(IntEnum):
     """Bit flags describing individual channels and digital ports."""
@@ -270,22 +282,25 @@ class PICO_CHANNEL_FLAGS(IntEnum):
     PORT2 = 262144
     PORT3 = 524288
 
+
 class COUPLING(IntEnum):
-    """
-    Enum class representing different types of coupling used in signal processing.
+    """Enum class representing different types of coupling used in
+    signal processing.
 
     Attributes:
         AC: Represents AC coupling.
         DC: Represents DC coupling.
         DC_50OHM: Represents 50 Ohm DC coupling.
     """
+
     AC = 0
     DC = 1
     DC_50OHM = 50
 
+
 class RANGE(IntEnum):
-    """
-    Enum class representing different voltage ranges used in signal processing.
+    """Enum class representing different voltage ranges used in signal
+    processing.
 
     Attributes:
         mV10: Voltage range of ±10 mV.
@@ -301,6 +316,7 @@ class RANGE(IntEnum):
         V20: Voltage range of ±20 V.
         V50: Voltage range of ±50 V.
     """
+
     mV10 = 0
     mV20 = 1
     mV50 = 2
@@ -314,29 +330,55 @@ class RANGE(IntEnum):
     V20 = 10
     V50 = 11
 
+
 RANGE_LIST = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000]
 
-range_literal = Literal['10mV', '20mV', '50mV', '100mV', '200mV', '500mV', 
-                        '1V', '2V', '5V', '10V', '20V', '50V']
-range_map = {'10mV':0, '20mV':1, '50mV':2, '100mV':3, '200mV':4, '500mV':5, 
-                        '1V':6, '2V':7, '5V':8, '10V':9, '20V':10, '50V':11}
+range_literal = Literal[
+    "10mV",
+    "20mV",
+    "50mV",
+    "100mV",
+    "200mV",
+    "500mV",
+    "1V",
+    "2V",
+    "5V",
+    "10V",
+    "20V",
+    "50V",
+]
+range_map = {
+    "10mV": 0,
+    "20mV": 1,
+    "50mV": 2,
+    "100mV": 3,
+    "200mV": 4,
+    "500mV": 5,
+    "1V": 6,
+    "2V": 7,
+    "5V": 8,
+    "10V": 9,
+    "20V": 10,
+    "50V": 11,
+}
+
 
 class BANDWIDTH_CH:
-    """
-    Class for different bandwidth configurations.
+    """Class for different bandwidth configurations.
 
     Attributes:
         FULL: Full bandwidth configuration.
         BW_20MHZ: Bandwidth of 20 MHz.
         BW_200MHZ: Bandwidth of 200 MHz.
     """
+
     FULL = 0
     BW_20MHZ = 1
     BW_200MHZ = 2
 
+
 class DATA_TYPE:
-    """
-    Class for different data types.
+    """Class for different data types.
 
     Attributes:
         INT8_T: 8-bit signed integer.
@@ -345,15 +387,16 @@ class DATA_TYPE:
         UINT32_T: 32-bit unsigned integer.
         INT64_T: 64-bit signed integer.
     """
+
     INT8_T = 0
     INT16_T = 1
     INT32_T = 2
     UINT32_T = 3
     INT64_T = 4
 
+
 class ACTION:
-    """
-    Action codes used to manage and clear data buffers.
+    """Action codes used to manage and clear data buffers.
 
     These action codes are used with functions like `setDataBuffer` to specify
     the type of operation to perform on data buffers.
@@ -363,17 +406,19 @@ class ACTION:
         ADD: Adds data to the buffer.
         CLEAR_THIS_DATA_BUFFER: Clears the current data buffer.
         CLEAR_WAVEFORM_DATA_BUFFERS: Clears all waveform data buffers.
-        CLEAR_WAVEFORM_READ_DATA_BUFFERS: Clears the waveform read data buffers.
+        CLEAR_WAVEFORM_READ_DATA_BUFFERS: Clears the waveform read data
+            buffers.
     """
+
     CLEAR_ALL = 0x00000001
     ADD = 0x00000002
     CLEAR_THIS_DATA_BUFFER = 0x00001000
     CLEAR_WAVEFORM_DATA_BUFFERS = 0x00002000
     CLEAR_WAVEFORM_READ_DATA_BUFFERS = 0x00004000
 
+
 class RATIO_MODE:
-    """
-    Defines various ratio modes for signal processing.
+    """Defines various ratio modes for signal processing.
 
     Attributes:
         AGGREGATE: Aggregate mode for data processing.
@@ -381,11 +426,14 @@ class RATIO_MODE:
         AVERAGE: Averaging mode for smoothing data.
         DISTRIBUTION: Mode for calculating distribution statistics.
         SUM: Mode for summing data.
-        TRIGGER_DATA_FOR_TIME_CALCULATION: Mode for calculating trigger data for time-based calculations.
+        TRIGGER_DATA_FOR_TIME_CALCULATION: Mode for calculating trigger data
+            for time-based calculations.
         SEGMENT_HEADER: Mode for segment header data processing.
-        TRIGGER: Trigger mode for event-based data. If manually setting buffers, TRIGGER will need its own buffer set.
+        TRIGGER: Trigger mode for event-based data. If manually setting
+            buffers, TRIGGER will need its own buffer set.
         RAW: Raw data mode, without any processing.
     """
+
     AGGREGATE = 1
     DECIMATE = 2
     AVERAGE = 4
@@ -393,32 +441,37 @@ class RATIO_MODE:
     SUM = 16
     TRIGGER_DATA_FOR_TIME_CALCULATION = 0x10000000
     TRIGGER_DATA_FOR_TIME_CALCUATION = (
-        TRIGGER_DATA_FOR_TIME_CALCULATION
-    )  # Deprecated alias
+        TRIGGER_DATA_FOR_TIME_CALCULATION  # Deprecated alias
+    )
     SEGMENT_HEADER = 0x20000000
     TRIGGER = 0x40000000
     RAW = 0x80000000
 
-class POWER_SOURCE:
-    """
-    Defines different power source connection statuses.
 
-    These values represent the connection status of a power supply or USB device.
+class POWER_SOURCE:
+    """Defines different power source connection statuses.
+
+    These values represent the connection status of a power supply or USB
+        device.
 
     Attributes:
         SUPPLY_CONNECTED: Power supply is connected.
         SUPPLY_NOT_CONNECTED: Power supply is not connected.
-        USB3_0_DEVICE_NON_USB3_0_PORT: USB 3.0 device is connected to a non-USB 3.0 port.
+        USB3_0_DEVICE_NON_USB3_0_PORT: USB 3.0 device is connected to a
+            non-USB 3.0 port.
     """
+
     SUPPLY_CONNECTED = 0x00000119
     SUPPLY_NOT_CONNECTED = 0x0000011A
-    USB3_0_DEVICE_NON_USB3_0_PORT= 0x0000011E
+    USB3_0_DEVICE_NON_USB3_0_PORT = 0x0000011E
+
 
 class SAMPLE_RATE(IntEnum):
     SPS = 1
     KSPS = 1_000
     MSPS = 1_000_000
     GSPS = 1_000_000_000
+
 
 class TIME_UNIT(IntEnum):
     FS = 1_000_000_000_000_000
@@ -428,8 +481,10 @@ class TIME_UNIT(IntEnum):
     MS = 1_000
     S = 1
 
-time_standard_form_l = Literal['fs', 'ps', 'ns', 'us', 'ms', 's']
-time_standard_form_m = {'fs': 15, 'ps': 12, 'ns': 9, 'us': 6, 'ms': 3, 's': 0}
+
+time_standard_form_l = Literal["fs", "ps", "ns", "us", "ms", "s"]
+time_standard_form_m = {"fs": 15, "ps": 12, "ns": 9, "us": 6, "ms": 3, "s": 0}
+
 
 class PICO_TIME_UNIT(IntEnum):
     FS = 0
@@ -439,8 +494,10 @@ class PICO_TIME_UNIT(IntEnum):
     MS = 4
     S = 5
 
+
 class PICO_VERSION(ctypes.Structure):
     """Firmware or driver version information.
+
     Attributes:
         major_: Major version number.
         minor_: Minor version number.
@@ -460,6 +517,7 @@ class PICO_VERSION(ctypes.Structure):
 
 class PICO_FIRMWARE_INFO(ctypes.Structure):
     """Information describing firmware versions and updates.
+
     Attributes:
         firmwareType_: Firmware identifier as a :class:`UNIT_INFO` value.
         currentVersion_: Currently installed :class:`PICO_VERSION`.
@@ -476,34 +534,21 @@ class PICO_FIRMWARE_INFO(ctypes.Structure):
         ("updateRequired_", ctypes.c_uint16),
     ]
 
+
 class DIGITAL_PORT(IntEnum):
     """Digital port identifiers for the 6000A series."""
+
     PORT0 = 128
     PORT1 = 129
 
+
 class DIGITAL_PORT_HYSTERESIS(IntEnum):
     """Hysteresis options for digital ports."""
+
     VERY_HIGH_400MV = 0
     HIGH_200MV = 1
     NORMAL_100MV = 2
     LOW_50MV = 3
-
-class PICO_CHANNEL_FLAGS(IntEnum):
-    """Bit flags for enabled channels used by ``ps6000aChannelCombinationsStateless``."""
-
-    CHANNEL_A_FLAGS = 1
-    CHANNEL_B_FLAGS = 2
-    CHANNEL_C_FLAGS = 4
-    CHANNEL_D_FLAGS = 8
-    CHANNEL_E_FLAGS = 16
-    CHANNEL_F_FLAGS = 32
-    CHANNEL_G_FLAGS = 64
-    CHANNEL_H_FLAGS = 128
-
-    PORT0_FLAGS = 65536
-    PORT1_FLAGS = 131072
-    PORT2_FLAGS = 262144
-    PORT3_FLAGS = 524288
 
 
 class PICO_CONNECT_PROBE_RANGE(IntEnum):
@@ -525,6 +570,7 @@ class PICO_CONNECT_PROBE_RANGE(IntEnum):
     D9_BNC_50V = 11
     D9_BNC_100V = 12
     D9_BNC_200V = 13
+
 
 class PICO_PROBE_RANGE_INFO(IntEnum):
     """Probe attenuation identifiers for ``get_scaling_values``."""
@@ -561,6 +607,7 @@ class PICO_SCALING_FACTORS_FOR_RANGE_TYPES_VALUES(ctypes.Structure):
         ("scalingFactor_", ctypes.c_double),
     ]
 
+
 class AUXIO_MODE(IntEnum):
     """Operating modes for the AUX IO connector."""
 
@@ -576,8 +623,11 @@ class AUXIO_MODE(IntEnum):
     #: Logic high pulse during the post-trigger acquisition time.
     TRIGGER_OUT = 3
 
+
 class PICO_CHANNEL_OVERVOLTAGE_TRIPPED(ctypes.Structure):
-    """Status flag indicating whether a channel's input protection tripped.
+    """Status flag indicating whether a channel's input protection
+    tripped.
+
     Attributes:
         channel_: Channel identifier as a :class:`CHANNEL` value.
         tripped_: ``1`` if the channel has tripped due to overvoltage.
@@ -589,6 +639,7 @@ class PICO_CHANNEL_OVERVOLTAGE_TRIPPED(ctypes.Structure):
         ("channel_", ctypes.c_int32),
         ("tripped_", ctypes.c_uint8),
     ]
+
 
 class TRIGGER_STATE(IntEnum):
     """Trigger state values used in :class:`PICO_CONDITION`."""
@@ -602,9 +653,10 @@ class TRIGGER_STATE(IntEnum):
     #: Condition must be false for the channel.
     FALSE = 2
 
+
 class PICO_USB_POWER_DELIVERY(ctypes.Structure):
-    """
-    Structure representing USB Power Delivery status information for a single USB port.
+    """Structure representing USB Power Delivery status information for
+    a single USB port.
 
     This structure provides detailed information about the USB Power Delivery
     contract and status for a USB port, including voltage, current limits,
@@ -612,7 +664,8 @@ class PICO_USB_POWER_DELIVERY(ctypes.Structure):
 
     Attributes:
         valid_ (ctypes.c_uint8):
-            Indicates whether the power delivery data is valid (non-zero if valid).
+            Indicates whether the power delivery data is valid (non-zero if
+                valid).
         busVoltagemV_ (ctypes.c_uint32):
             The bus voltage in millivolts.
         rpCurrentLimitmA_ (ctypes.c_uint32):
@@ -622,7 +675,8 @@ class PICO_USB_POWER_DELIVERY(ctypes.Structure):
         ccPolarity_ (ctypes.c_uint8):
             The polarity of the CC (Configuration Channel) line.
         attachedDevice_ (ctypes.c_uint8):
-            The type of device attached (corresponds to PICO_USB_POWER_DELIVERY_DEVICE_TYPE).
+            The type of device attached (corresponds to
+                PICO_USB_POWER_DELIVERY_DEVICE_TYPE).
         contractExists_ (ctypes.c_uint8):
             Indicates whether a power contract exists (non-zero if yes).
         currentPdo_ (ctypes.c_uint32):
@@ -630,6 +684,7 @@ class PICO_USB_POWER_DELIVERY(ctypes.Structure):
         currentRdo_ (ctypes.c_uint32):
             The current Request Data Object (RDO) index.
     """
+
     _pack_ = 1
 
     _fields_ = [
@@ -644,9 +699,9 @@ class PICO_USB_POWER_DELIVERY(ctypes.Structure):
         ("currentRdo_", ctypes.c_uint32),
     ]
 
+
 class PICO_USB_POWER_DETAILS(ctypes.Structure):
-    """
-    Structure describing USB power details for a PicoScope device.
+    """Structure describing USB power details for a PicoScope device.
 
     Attributes:
         dataPort_ (PICO_USB_POWER_DELIVERY):
@@ -654,6 +709,7 @@ class PICO_USB_POWER_DETAILS(ctypes.Structure):
         powerPort_ (PICO_USB_POWER_DELIVERY):
             USB power delivery details related to the device's power port.
     """
+
     _pack_ = 1
 
     _fields_ = [
@@ -708,8 +764,8 @@ class PICO_TRIGGER_INFO(ctypes.Structure):
     ``info.triggerTime_``.
 
     Attributes:
-        status_:   :class:`PICO_STATUS` value describing the trigger state. This
-            may be a bitwise OR of multiple status flags such as
+        status_:   :class:`PICO_STATUS` value describing the trigger state.
+            This may be a bitwise OR of multiple status flags such as
             ``PICO_DEVICE_TIME_STAMP_RESET`` or
             ``PICO_TRIGGER_TIME_NOT_REQUESTED``.
         segmentIndex_:  Memory segment index from which the information was
@@ -736,6 +792,7 @@ class PICO_TRIGGER_INFO(ctypes.Structure):
         ("missedTriggers_", ctypes.c_uint64),
         ("timeStampCounter_", ctypes.c_uint64),
     ]
+
 
 TIMESTAMP_COUNTER_MASK: int = (1 << 56) - 1
 """Mask for the 56-bit ``timeStampCounter`` field."""
@@ -793,7 +850,8 @@ class PICO_CONDITION(ctypes.Structure):
 
 
 class THRESHOLD_DIRECTION(IntEnum):
-    """Enumerates trigger threshold directions used with :class:`PICO_DIRECTION`."""
+    """Enumerates trigger threshold directions used with
+    :class:`PICO_DIRECTION`."""
 
     ABOVE = 0
     BELOW = 1
@@ -815,7 +873,8 @@ class THRESHOLD_DIRECTION(IntEnum):
 
 
 class THRESHOLD_MODE(IntEnum):
-    """Threshold operation mode values used in :class:`PICO_DIRECTION`."""
+    """Threshold operation mode values used in
+    :class:`PICO_DIRECTION`."""
 
     LEVEL = 0
     WINDOW = 1
@@ -837,6 +896,7 @@ class PICO_DIRECTION(ctypes.Structure):
         ("direction_", ctypes.c_int32),
         ("thresholdMode_", ctypes.c_int32),
     ]
+
 
 class PICO_PORT_DIGITAL_CHANNEL(IntEnum):
     """Digital channel identifiers within a port."""
@@ -943,9 +1003,9 @@ class TRIGGER_WITHIN_PRE_TRIGGER(IntEnum):
 
 # LED Structures
 class PICO_LED_COLOUR_PROPERTIES(ctypes.Structure):
-    """This structure is used with psospaSetLedColours() to define 
-    the color for one LED using hue and saturation (HSV) values 
-    for the color."""
+    """This structure is used with psospaSetLedColours() to define the
+    color for one LED using hue and saturation (HSV) values for the
+    color."""
 
     _pack_ = 1
 
@@ -955,97 +1015,103 @@ class PICO_LED_COLOUR_PROPERTIES(ctypes.Structure):
         ("saturation_", ctypes.c_uint8),
     ]
 
+
 class PICO_LED_STATE_PROPERTIES(ctypes.Structure):
-    """This structure is used with set_led_states() to define the 
-    state for one LED."""
+    """This structure is used with set_led_states() to define the state
+    for one LED."""
+
     # _pack_ = 8
     _fields_ = [
         ("led_", ctypes.c_uint32),
         ("state_", ctypes.c_int8),
     ]
 
-led_state_l = Literal['auto', 'off', 'on']
-led_state_m = {'auto': -1, 'off': 0, 'on': 1}
 
-led_colours_l = Literal['red', 'green', 'blue', 'yellow', 'pink']
-led_colours_m = {'red': 0, 'green': 100, 'blue': 244, 'yellow': 61, 'pink':306}
+led_state_l = Literal["auto", "off", "on"]
+led_state_m = {"auto": -1, "off": 0, "on": 1}
+
+led_colours_l = Literal["red", "green", "blue", "yellow", "pink"]
+led_colours_m = {
+    "red": 0,
+    "green": 100,
+    "blue": 244,
+    "yellow": 61,
+    "pink": 306,
+}
 
 # Public names exported by :mod:`pypicosdk.constants` for ``import *`` support.
 # This explicit list helps static analyzers like Pylance discover available
 # attributes when the parent package re-exports ``pypicosdk.constants`` using
 # ``from .constants import *``.
 __all__ = [
-    'UNIT_INFO',
-    'RESOLUTION',
-    'TRIGGER_DIR',
-    'WAVEFORM',
-    'CHANNEL',
-    'CHANNEL_NAMES',
-    'PICO_CHANNEL_OVERVOLTAGE_TRIPPED',
-    'PICO_CHANNEL_FLAGS',
-    'COUPLING',
-    'RANGE',
-    'RANGE_LIST',
-    'BANDWIDTH_CH',
-    'DATA_TYPE',
-    'ACTION',
-    'RATIO_MODE',
-    'POWER_SOURCE',
-    'SAMPLE_RATE',
-    'TIME_UNIT',
-    'PICO_TIME_UNIT',
-    'PICO_VERSION',
-    'PICO_FIRMWARE_INFO',
-    'DIGITAL_PORT',
-    'DIGITAL_PORT_HYSTERESIS',
-    'PICO_CHANNEL_FLAGS',
-    'PICO_CONNECT_PROBE_RANGE',
-    'PICO_PROBE_RANGE_INFO',
-    'PICO_SCALING_FACTORS_VALUES',
-    'PICO_SCALING_FACTORS_FOR_RANGE_TYPES_VALUES',
-    'AUXIO_MODE',
-    'PICO_CHANNEL_OVERVOLTAGE_TRIPPED',
-    'TRIGGER_STATE',
-    'PICO_USB_POWER_DELIVERY',
-    'PICO_USB_POWER_DETAILS',
-    'PICO_STREAMING_DATA_INFO',
-    'PICO_STREAMING_DATA_TRIGGER_INFO',
-    'PICO_TRIGGER_INFO',
-    'TIMESTAMP_COUNTER_MASK',
-    'PICO_TRIGGER_CHANNEL_PROPERTIES',
-    'PICO_CONDITION',
-    'THRESHOLD_DIRECTION',
-    'THRESHOLD_MODE',
-    'PICO_DIRECTION',
-    'PICO_PORT_DIGITAL_CHANNEL',
-    'PICO_DIGITAL_DIRECTION',
-    'PICO_DIGITAL_CHANNEL_DIRECTIONS',
-    'PULSE_WIDTH_TYPE',
-    'SWEEP_TYPE',
-    'PICO_SIGGEN_TRIG_TYPE',
-    'PICO_SIGGEN_TRIG_SOURCE',
-    'SIGGEN_FILTER_STATE',
-    'SIGGEN_PARAMETER',
-    'TRIGGER_WITHIN_PRE_TRIGGER',
-    'PICO_LED_COLOUR_PROPERTIES',
-    'PICO_LED_STATE_PROPERTIES',
-
-    'channel_literal',
-    'channel_map',
-    'trigger_dir_l',
-    'trigger_dir_m',
-    'time_standard_form_l',
-    'time_standard_form_m',
-    'led_channel_l',
-    'led_channel_m',
-    'led_state_l',
-    'led_state_m',
-    'led_colours_l',
-    'led_colours_m',
-    'range_literal',
-    'range_map',
-    'resolution_literal',
-    'resolution_map',
-    'waveform_literal',
-    'waveform_map',
+    "UNIT_INFO",
+    "RESOLUTION",
+    "TRIGGER_DIR",
+    "WAVEFORM",
+    "CHANNEL",
+    "CHANNEL_NAMES",
+    "PICO_CHANNEL_FLAGS",
+    "COUPLING",
+    "RANGE",
+    "RANGE_LIST",
+    "BANDWIDTH_CH",
+    "DATA_TYPE",
+    "ACTION",
+    "RATIO_MODE",
+    "POWER_SOURCE",
+    "SAMPLE_RATE",
+    "TIME_UNIT",
+    "PICO_TIME_UNIT",
+    "PICO_VERSION",
+    "PICO_FIRMWARE_INFO",
+    "DIGITAL_PORT",
+    "DIGITAL_PORT_HYSTERESIS",
+    "PICO_CONNECT_PROBE_RANGE",
+    "PICO_PROBE_RANGE_INFO",
+    "PICO_SCALING_FACTORS_VALUES",
+    "PICO_SCALING_FACTORS_FOR_RANGE_TYPES_VALUES",
+    "AUXIO_MODE",
+    "PICO_CHANNEL_OVERVOLTAGE_TRIPPED",
+    "TRIGGER_STATE",
+    "PICO_USB_POWER_DELIVERY",
+    "PICO_USB_POWER_DETAILS",
+    "PICO_STREAMING_DATA_INFO",
+    "PICO_STREAMING_DATA_TRIGGER_INFO",
+    "PICO_TRIGGER_INFO",
+    "TIMESTAMP_COUNTER_MASK",
+    "PICO_TRIGGER_CHANNEL_PROPERTIES",
+    "PICO_CONDITION",
+    "THRESHOLD_DIRECTION",
+    "THRESHOLD_MODE",
+    "PICO_DIRECTION",
+    "PICO_PORT_DIGITAL_CHANNEL",
+    "PICO_DIGITAL_DIRECTION",
+    "PICO_DIGITAL_CHANNEL_DIRECTIONS",
+    "PULSE_WIDTH_TYPE",
+    "SWEEP_TYPE",
+    "PICO_SIGGEN_TRIG_TYPE",
+    "PICO_SIGGEN_TRIG_SOURCE",
+    "SIGGEN_FILTER_STATE",
+    "SIGGEN_PARAMETER",
+    "TRIGGER_WITHIN_PRE_TRIGGER",
+    "PICO_LED_COLOUR_PROPERTIES",
+    "PICO_LED_STATE_PROPERTIES",
+    "channel_literal",
+    "channel_map",
+    "trigger_dir_l",
+    "trigger_dir_m",
+    "time_standard_form_l",
+    "time_standard_form_m",
+    "led_channel_l",
+    "led_channel_m",
+    "led_state_l",
+    "led_state_m",
+    "led_colours_l",
+    "led_colours_m",
+    "range_literal",
+    "range_map",
+    "resolution_literal",
+    "resolution_map",
+    "waveform_literal",
+    "waveform_map",
 ]

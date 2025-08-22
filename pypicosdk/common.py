@@ -1,24 +1,43 @@
+"""Common functions and classes in pyPicoSDK"""
+
 import ctypes
 import platform
 import os
+from typing import Protocol
+
 
 class PicoSDKNotFoundException(Exception):
-    pass
+    """PicoScope not found user exception"""
 
 
 class PicoSDKException(Exception):
-    pass
+    """PicoScope SDK user exception"""
 
 
 class OverrangeWarning(UserWarning):
-    pass
+    """Overrange user warning"""
 
 
 class PowerSupplyWarning(UserWarning):
-    pass
+    """PowerSupply user warning"""
+
+
+class BaseProtocol(Protocol):
+    """docstring"""
+    handle = ...
+    resolution = ...
+    _pending_resolution = ...
+    min_adc_value = ...
+    max_adc_value = ...
+    channel_dict = {}
+    probe_scale = {}
+
+    def _call_attr_function(self, *args, **kwargs) -> int:
+        return ...
+
 
 # General Functions
-def _check_path(location:str, folders:list) -> str:
+def _check_path(location: str, folders: list) -> str:
     """Checks a list of folders in a location i.e. ['Pico Technology']
        in /ProgramFiles/ and returns first full path found
 
@@ -37,8 +56,10 @@ def _check_path(location:str, folders:list) -> str:
         if os.path.exists(path):
             return path
     raise PicoSDKException(
-        "No PicoSDK or PicoScope 7 drivers installed, get them from http://picotech.com/downloads"
+        "No PicoSDK or PicoScope 7 drivers installed, "
+        "get them from http://picotech.com/downloads"
     )
+
 
 def _get_lib_path() -> str:
     """Looks for PicoSDK folder based on OS and returns folder
@@ -65,41 +86,44 @@ def _get_lib_path() -> str:
         raise PicoSDKException("macOS is not yet tested and supported")
     else:
         raise PicoSDKException("Unsupported OS")
-    
-def _struct_to_dict(struct_instance: ctypes.Structure, format=False) -> dict:
+
+
+def _struct_to_dict(struct_instance: ctypes.Structure,
+                    struct_format=False) -> dict:
     """Takes a ctypes struct and returns the values as a python dict
 
     Args:
-        struct_instance (ctypes.Structure): ctype structure to convert into dictionary
+        struct_instance (ctypes.Structure):
+            ctype structure to convert into dictionary
 
     Returns:
         dict: python dictionary of struct values
     """
     result = {}
-    for field_name, _ in struct_instance._fields_:
-        if format:
-            result[field_name.replace('_', '')] = getattr(struct_instance, field_name)
+    for field_name, _ in struct_instance._fields_:  # pylint: disable=W0212
+        if struct_format:
+            result[field_name.replace('_', '')] = getattr(
+                struct_instance, field_name)
         else:
             result[field_name] = getattr(struct_instance, field_name)
     return result
 
-def _get_literal(variable:str, map:dict):
+
+def _get_literal(variable: str, map: dict):  # pylint: disable=W0622
     """Checks if typing Literal variable is in corresponding map
     and returns enum integer value"""
-    if type(variable) is not str:
+    if not isinstance(variable, str):
         return variable
     if variable in map:
         return map[variable]
     else:
-        raise PicoSDKException(f'Variable \'{variable}\' not in {list(map.keys())}')
+        raise PicoSDKException(
+            f'Variable \'{variable}\' not in {list(map.keys())}')
+
 
 __all__ = [
     'PicoSDKException',
     'PicoSDKNotFoundException',
     'OverrangeWarning',
     'PowerSupplyWarning',
-    '_struct_to_dict',
-    '_get_lib_path',
-    '_check_path',
-    '_get_literal',
 ]
