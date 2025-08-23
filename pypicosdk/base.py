@@ -1,4 +1,5 @@
-"""Empty"""  # pylint: disable=too-many-lines
+"""Empty"""
+# pylint: disable=R0902,R0904,C0302
 
 import ctypes
 import os

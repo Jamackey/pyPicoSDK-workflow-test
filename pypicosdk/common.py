@@ -35,6 +35,10 @@ class BaseProtocol(Protocol):
     def _call_attr_function(self, *args, **kwargs) -> int:
         return ...
 
+    def get_adc_limits(self, *args):
+        """Protocol Function"""
+        return 0, 0
+
 
 # General Functions
 def _check_path(location: str, folders: list) -> str:
