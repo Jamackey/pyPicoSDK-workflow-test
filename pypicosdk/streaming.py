@@ -1,7 +1,9 @@
 from .constants import *
 from .ps6000a import ps6000a
+from .common import OverflowWarning
 import numpy as np
 from warnings import warn
+import time
 
 """
 Todo:
@@ -14,6 +16,12 @@ class StreamingScope:
         self.scope = scope
         self.stop_bool = False  # Bool to stop streaming while loop
         self.channel_config = []
+
+        self.current_sps = 0
+        self.overflow = 0
+        self._overflow_flag = False
+
+        self.info = {}
 
     def config_streaming(
             self, 
@@ -96,7 +104,19 @@ class StreamingScope:
             None
         """
         self.channel_config.append([channel, ratio_mode, data_type])
-        
+
+    def check_overflow(self) -> None:
+        """
+        Checks if more data has been captured than transferred to the PC.
+        If so a warning is created once per script run.
+        """
+        if self.overflow == 1 and not self._overflow_flag:
+            warn(
+                'Data buffer has overflowed, use a slower interval rate' +
+                ' to allow data transfer to keep up',
+                OverflowWarning
+            )
+            self._overflow_flag = True
 
     def run_streaming(self) -> None:
         """
@@ -112,6 +132,7 @@ class StreamingScope:
         self.buffer_index = 0
         self.stop_bool = False
         self.np_buffer = np.zeros((2, self.samples), dtype=np.int16)
+        self.buffer_array = np.array([], dtype=np.int16)
         # Setup initial buffer for streaming
         self.scope.set_data_buffer(0, 0, action=ACTION.CLEAR_ALL) # Clear all buffers
         self.scope.set_data_buffer(self.channel, self.samples, segment=0, buffer=self.np_buffer[0])
@@ -130,15 +151,16 @@ class StreamingScope:
         """
         Main loop for handling streaming data acquisition.
 
-        This method retrieves the latest streaming data from the device, appends new 
-        samples to the internal buffer array, and manages buffer rollover when the 
-        hardware buffer becomes full.
+        This method retrieves the latest streaming data from the device,
+        appends new samples to the internal buffer array, and manages buffer
+        rollover when the hardware buffer becomes full.
 
-        The method ensures that the internal buffer (`self.buffer_array`) always 
-        contains the most recent samples up to `max_buffer_size`. It also handles 
-        alternating between buffer segments when a buffer overflow condition is detected.
+        The method ensures that the internal buffer (`self.buffer_array`)
+        always contains the most recent samples up to `max_buffer_size`. It
+        also handles alternating between buffer segments when a buffer
+        overflow condition is detected.
         """
-
+        timer_start = time.perf_counter_ns()
         info = self.scope.get_streaming_latest_values(
             channel=self.channel,
             ratio_mode=self.ratio_mode,
@@ -146,12 +168,19 @@ class StreamingScope:
         )
         n_samples = info['no of samples']
         start_index = info['start index']
+        self.overflow = info['overflowed?']
+        self.check_overflow()
         # If buffer isn't empty, add data to array
         if n_samples > 0:
+            # print(info)
+            timer_end = time.perf_counter_ns()
+            self.current_sps = ((n_samples * 1_000_000_000) //
+                                (timer_end-timer_start))
             # Add the new buffer to the buffer array and take end chunk
-            self.buffer_array = np.concatenate([self.buffer_array] + [self.np_buffer[self.buffer_index][start_index:start_index+n_samples]])
-            if self.max_buffer_size is not None:
-                self.buffer_array = self.buffer_array[-self.max_buffer_size:]
+            new_data = self.np_buffer[self.buffer_index][start_index:start_index+n_samples]
+            self.buffer_array = np.concatenate([self.buffer_array, new_data])[-self.max_buffer_size:]
+            # self.buffer_array = np.concatenate([self.buffer_array, new_data])
+            # print(len(self.buffer_array), start_index+n_samples)
         # If buffer full, create new buffer
         if info['status'] == 407:
             self.buffer_index = (self.buffer_index + 1) % 2 # Switch between buffer segment index 0*samples and 1*samples

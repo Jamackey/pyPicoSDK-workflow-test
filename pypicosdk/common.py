@@ -14,6 +14,10 @@ class OverrangeWarning(UserWarning):
     pass
 
 
+class OverflowWarning(UserWarning):
+    pass
+
+
 class PowerSupplyWarning(UserWarning):
     pass
 

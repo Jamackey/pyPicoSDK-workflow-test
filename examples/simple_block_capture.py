@@ -7,8 +7,8 @@ from matplotlib import pyplot as plt
 SAMPLES = 5_000
 
 # Initialise PicoScope 6000
-scope = psdk.ps6000a()
-scope.open_unit()
+scope = psdk.psospa()
+scope.open_unit(resolution='10bit')
 
 # Setup siggen
 scope.set_siggen(frequency=1_000_000, pk2pk=0.8, wave_type=psdk.WAVEFORM.SINE)
