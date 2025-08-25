@@ -84,8 +84,8 @@ def animate(_, stream: StreamingScope):
     # data = stream.buffer_array[::DISPLAY_RATIO]
     # time_axis = time_class.time_axis[::DISPLAY_RATIO]
     # line.set_data(time_axis, data)
-    if len(stream.buffer_array) == MAX_SAMPLES:
-        data = stream.buffer_array[::DISPLAY_RATIO]
+    if len(stream.buffer_array) >= MAX_SAMPLES:
+        data = stream.buffer_array[-MAX_SAMPLES::DISPLAY_RATIO]
         line.set_ydata(data)
     return [line]
 

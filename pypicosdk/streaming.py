@@ -178,8 +178,8 @@ class StreamingScope:
                                 (timer_end-timer_start))
             # Add the new buffer to the buffer array and take end chunk
             new_data = self.np_buffer[self.buffer_index][start_index:start_index+n_samples]
-            self.buffer_array = np.concatenate([self.buffer_array, new_data])[-self.max_buffer_size:]
-            # self.buffer_array = np.concatenate([self.buffer_array, new_data])
+            # self.buffer_array = np.concatenate([self.buffer_array, new_data])[-self.max_buffer_size:]
+            self.buffer_array = np.concatenate([self.buffer_array, new_data])
             # print(len(self.buffer_array), start_index+n_samples)
         # If buffer full, create new buffer
         if info['status'] == 407:
