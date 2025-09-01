@@ -5,7 +5,7 @@ theme:
 
 nav:
   - Home: index.md
-  - Reference: 
+  - Reference:
     - Introduction: ref/introduction.md
     - PicoScope 6000E (A) Specific Functions:
       - ref/ps6000a/init.md
@@ -37,7 +37,9 @@ nav:
     - ref/general.md
     - General Constants: ref/constants.md
     - ref/streaming.md
-  - Development: 
+    - Decoding:
+      - ref/decoder/uart.md
+  - Development:
     - Changelog: dev/changelog.md
     - Current Support: dev/current.md
     - Upcoming Roadmap: dev/roadmap.md
@@ -51,7 +53,9 @@ plugins:
 - mkdocstrings:
     handlers:
       python:
-        paths: [..]
+        paths:
+         - ..
+         - ../pypicosdk/decoder
         options:
           allow_inspection: true
           docstring_style: google
@@ -62,6 +66,9 @@ plugins:
           separate_signature: false
           extensions:
           - griffe_inherited_docstrings
-          
+
+markdown_extensions:
+  - admonition
+
 extra_css:
 - css/mkdocstrings.css
